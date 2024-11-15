@@ -19,16 +19,13 @@ include '../partials/side-bar.php';
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <div class="form-group mb-3">
-                <label for="inputStudentId">Student ID</label>
-                <input type="text" name="student_id" class="form-control" id="studentId" placeholder="Enter Student ID ">
+                <input type="text" name="student_id" class="form-control" id="studentId" placeholder="Student ID ">
             </div>
             <div class="form-group mb-3">
-                <label for="inputFirstName">First Name</label>
-                <input type="text" name="first_name" class="form-control" id="firstName" placeholder="Enter First Name">
+                <input type="text" name="first_name" class="form-control" id="firstName" placeholder="First Name">
             </div>
             <div class="form-group mb-3">
-                <label for="inputLastName">Last Name</label>
-                <input type="text" name="last_name" class="form-control" id="lastName" placeholder="Enter Last Name">
+                <input type="text" name="last_name" class="form-control" id="lastName" placeholder="Last Name">
             </div>
             <button type="submit" name="btnStudent" class="btn btn-primary w-100">Add Student</button>
         </form>
@@ -50,9 +47,9 @@ include '../partials/side-bar.php';
                 <td>Renmark</td>
                 <td>Salalila</td>
                 <td>
-                    <a href="" class="btn btn-info">Edit</a href="">
-                    <a href="" class="btn btn-danger">Delete</a href="">
-                    <a href="" type="button" class="btn btn-warning">Attach Subject</a href="">
+                    <a href="../student/edit.php" class="btn btn-info">Edit</a href="">
+                    <a href="../student/delete.php" class="btn btn-danger">Delete</a href="">
+                    <a href="../student/attach-subject.php" type="button" class="btn btn-warning">Attach Subject</a href="">
                 </td>
             </tr>
         </tbody>

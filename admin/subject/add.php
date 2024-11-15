@@ -45,8 +45,8 @@
                 <td>1001</td>
                 <td>English</td>
                 <td>
-                    <a href="" class="btn btn-info">Edit</a>
-                    <a href="" class="btn btn-danger">Delete</a>
+                    <a href="../subject/edit.php" class="btn btn-info">Edit</a>
+                    <a href="../subject/delete.php" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
                 </tbody>
