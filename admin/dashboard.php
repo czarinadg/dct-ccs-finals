@@ -35,7 +35,7 @@ include './partials/side-bar.php';
             <div class="card border-success mb-3">
                 <div class="card-header bg-success text-white border-success">Number of Passed Students:</div>
                 <div class="card-body text-success">
-                    <h5 class="card-title">0></h5>
+                    <h5 class="card-title">0</h5>
                 </div>
             </div>
         </div>
