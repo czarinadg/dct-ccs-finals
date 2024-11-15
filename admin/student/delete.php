@@ -20,9 +20,9 @@
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <label style="font-size: 15px">Are you sure you want to delete the following student record?</label>
             <ul>
-                <li><span style="font-weight: bold"> Subject Code:</li>
-                <li><span style="font-weight: bold"> Subject Name:</li>
-                <li><span style="font-weight: bold"> Subject Code:</li>
+                <li><span style="font-weight: bold"> Student ID:</li>
+                <li><span style="font-weight: bold"> First Name:</li>
+                <li><span style="font-weight: bold"> Last Name:</li>
             </ul>
             <a href="register.php" class="btn btn-secondary btn-sm">Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm" name="btnStudent">Delete Student Record</button>

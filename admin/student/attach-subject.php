@@ -1,5 +1,5 @@
 <?php
-    $titlePage = "Edit Student Record";
+    $titlePage = "Attach Subject to Student";
     include '../partials/header.php';
     include '../partials/side-bar.php';
 ?>
@@ -65,11 +65,12 @@
         </thead>
         <tbody>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>1001</td>
+                <td>English</td>
+                <td>99.00</td>
                 <td>
-                
+                    <a href="../student/dettach-subject.php" type="button" class="btn btn-danger">Detach Subject</a>
+                    <a href="../student/assign-grade.php" type="button" class="btn btn-success">Assign Grade</a>
                 </td>
             </tr>
         </tbody>
