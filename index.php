@@ -1,3 +1,15 @@
+<?php 
+include 'functions.php';
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
+
+    login($email, $password);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +38,6 @@
                         </div>
                         <div class="form-floating mb-3">
                             <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
-                            <a href="../dct-ccs-finals/admin/dashboard.php">button</a>
                         </div>
                     </form>
                 </div>
