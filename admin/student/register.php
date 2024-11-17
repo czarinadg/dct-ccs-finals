@@ -1,7 +1,18 @@
 <?php
+include '../../functions.php';
+guard();
+
 $titlePage = "Register Student";
 include '../partials/header.php';
 include '../partials/side-bar.php';
+
+$_SESSION['page'] = "admin/student/register.php";
+
+global $conn;
+
+$sql = "SELECT * FROM students";
+$result = $conn->query($sql);
+
 ?>
 
 
@@ -42,16 +53,22 @@ include '../partials/side-bar.php';
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1001</td>
-                <td>Renmark</td>
-                <td>Salalila</td>
-                <td>
-                    <a href="../student/edit.php" class="btn btn-info">Edit</a href="">
-                    <a href="../student/delete.php" class="btn btn-danger">Delete</a href="">
-                    <a href="../student/attach-subject.php" type="button" class="btn btn-warning">Attach Subject</a href="">
-                </td>
-            </tr>
+
+        <?php
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>
+                        <td>' . $row['student_id']. '</td>
+                        <td>' . $row['first_name']. '</td>
+                        <td>' . $row['last_name']. '</td>
+                        <td>
+                            <a href="edit.php?id=' .$row['id']. '" class="btn btn-info">Edit</a>
+                            <a href="delete.php?id=' .$row['id']. '" class="btn btn-danger">Delete</a>
+                            <a href="attach-subject.php?id=' .$row['id']. '" type="button" class="btn btn-warning">Attach Subject</a>
+                        </td>
+                    </tr>';
+            }
+        ?>
+         
         </tbody>
     </table>
 </form>
