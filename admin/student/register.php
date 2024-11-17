@@ -10,6 +10,21 @@ $_SESSION['page'] = "admin/student/register.php";
 
 global $conn;
 
+$errorMessages = "";
+
+if (isset($_POST['btnStudent'])) {
+    $studentId = $_POST['student_id'];
+    $studentFirstName = $_POST['first_name'];
+    $studentLastName = $_POST['last_name'];
+
+    $validate = validateStudent($studentId, $studentFirstName, $studentLastName);
+    if (!$validate['success']) {
+        $errorMessages = $validate['error']; 
+    } 
+
+    
+}
+
 $sql = "SELECT * FROM students";
 $result = $conn->query($sql);
 
@@ -29,6 +44,7 @@ $result = $conn->query($sql);
         </div>
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
+            <?php echo renderErrorMessages($errorMessages); ?>
             <div class="form-group mb-3">
                 <input type="text" name="student_id" class="form-control" id="studentId" placeholder="Student ID ">
             </div>
