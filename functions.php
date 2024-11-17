@@ -83,6 +83,69 @@ function loginValidation($email, $password)
     
 }
 
+
+function logout()
+{
+    unset($_SESSION['email']);
+    header('Location: ../index.php');
+}
+
+function validateStudent($studentId, $studentFirstName, $studentLastName)
+{
+    global $conn;
+
+    $htmlError = '';
+    if (empty($studentId)) {
+        $htmlError .= '<li>Student ID is required.</li>';
+    }
+    if (empty($studentFirstName)) {
+        $htmlError .= '<li>Firstname is required.</li>';
+    }
+    if (empty($studentLastName)) {
+        $htmlError .= '<li>Lastname is required.</li>';
+    }
+    
+    $sql = "SELECT * FROM students WHERE student_id = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+    $stmt->bind_param("s", $studentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();  
+        if (($studentId) == $row['student_id']) {
+            $htmlError .= '<li>Duplicate Student ID is not allowed.</li>';
+        }
+    }
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+            
+    } else {
+        $sql = "INSERT INTO students (student_id, first_name, last_name) VALUES ('$studentId', '$studentFirstName', '$studentLastName')";
+        if ($conn->query($sql) === TRUE) {
+            return [
+                "success" => true,
+            ];
+        }  else {
+            return [
+                "success" => false,
+                "error" => '<li>Not save.</li>'
+            ];
+        }
+        
+    }
+
+}
+
+
 function renderErrorMessages($htmlError)
 {
     if ($htmlError != "") {
@@ -118,12 +181,6 @@ function checkUserSessionIsActive()
             exit;
         }
     }
-}
-
-function logout()
-{
-    unset($_SESSION['email']);
-    header('Location: ../index.php');
 }
 
 ?>
