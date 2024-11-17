@@ -1,11 +1,25 @@
 <?php 
 include 'functions.php';
+checkUserSessionIsActive();
+
+$errorMessages = "";
+$email = "";
+$password = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $email = $_POST['email'];
-    $password = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    login($email, $password);
+    $validation = loginValidation($email, $password);
+    if (!$validation['success']) {
+        $errorMessages = $validation['error']; 
+    } else {
+        $loginValidation = login($email, $password);
+        if (!$loginValidation['success']) {
+            $errorMessages = $loginValidation['error'];
+        }
+    }
+    
 }
 ?>
 
@@ -23,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <body class="bg-secondary-subtle">
     <div class="d-flex align-items-center justify-content-center vh-100">
         <div class="col-3">
-            <!-- Server-Side Validation Messages should be placed here -->
+            <?php echo renderErrorMessages($errorMessages); ?>
             <div class="card">
                 <div class="card-body">
                     <h1 class="h3 mb-4 fw-normal">Login</h1>
