@@ -1,7 +1,15 @@
 <?php
+include '../functions.php';
+guard();
+
 $titlePage = "Dashboard";
 include './partials/header.php';
 include './partials/side-bar.php';
+
+
+$_SESSION['page'] = "admin/dashboard.php";
+
+
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">    
     <h1 class="h2">Dashboard</h1>        
