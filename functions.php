@@ -183,4 +183,45 @@ function checkUserSessionIsActive()
     }
 }
 
+function editStudent($studentId, $studentFirstName, $studentLastName)
+{
+    global $conn;
+
+    $htmlError = '';
+    if (empty($studentId)) {
+        $htmlError .= '<li>Student ID is required.</li>';
+    }
+    if (empty($studentFirstName)) {
+        $htmlError .= '<li>Firstname is required.</li>';
+    }
+    if (empty($studentLastName)) {
+        $htmlError .= '<li>Lastname is required.</li>';
+    }
+
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+    } else {
+        $stmt = $conn->prepare("UPDATE students SET first_name = ?, last_name = ? WHERE student_id = ?");
+        $stmt->bind_param("ssi", $studentFirstName, $studentLastName, $studentId);
+
+        if ($stmt->execute()) {
+            return [
+                "success" => true,
+                "error" => null
+            ];
+        } else {
+            return [
+                "success" => false,
+                "error" => '<li>Unable to save changes. Please try again later.</li>'
+            ];
+        }
+
+        $stmt->close();
+    }
+}
+
+
 ?>
