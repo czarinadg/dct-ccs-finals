@@ -1,7 +1,34 @@
 <?php
+    include '../../functions.php';
+    guard();
+
     $titlePage = "Add Subject";
     include '../partials/header.php';
     include '../partials/side-bar.php';
+
+    $_SESSION['page'] = "admin/subject/add.php";
+
+    global $conn;
+
+    $errorMessages = "";
+
+    if (isset($_POST['btnSubject'])) {
+        $subjectCode = $_POST['subject_code'];
+        $subjectName = $_POST['subject_name'];
+
+        $validate = validateSubject($subjectCode, $subjectName);
+        if (!$validate['success']) {
+            $errorMessages = $validate['error']; 
+        } 
+
+        
+    }
+
+    $sql = "SELECT * FROM subjects";
+    $result = $conn->query($sql);
+
+
+
 ?>
 
 
@@ -18,6 +45,7 @@
         </div>
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
+        <?php echo renderErrorMessages($errorMessages); ?>
             <div class="form-group mb-3">
                 <label for="exampleInputSubjectCode">Subject Code</label>
                 <input type="text" class="form-control" id="exampleInputCode" name="subject_code" placeholder="Enter Subject Code">
@@ -41,14 +69,28 @@
                     </tr>
                 </thead>
             <tbody>
-            <tr>
+            <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo '<tr>
+                            <td>' . $row['subject_code']. '</td>
+                            <td>' . $row['subject_name']. '</td>
+                            <td>
+                                <a href="edit.php?id=' .$row['id']. '" class="btn btn-info">Edit</a>
+                                <a href="delete.php?id=' .$row['id']. '" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>';
+                }
+            ?>
+                
+            
+            <!-- <tr>
                 <td>1001</td>
                 <td>English</td>
                 <td>
                     <a href="../subject/edit.php" class="btn btn-info">Edit</a>
                     <a href="../subject/delete.php" class="btn btn-danger">Delete</a>
                 </td>
-            </tr>
+            </tr> -->
                 </tbody>
             </table>
         </div>
