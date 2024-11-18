@@ -378,5 +378,29 @@ function editSubject($subjectCode, $subjectName)
     }
 }
 
+function deleteSubject($subjectCode)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM subjects WHERE id = ?");
+    $stmt->bind_param("i", $subjectCode);
+
+    if ($stmt->execute()) {
+        return [
+            "success" => true,
+            "error" => null
+        ];
+    } else {
+        return [
+            "success" => false,
+            "error" => '<li>Unable to delete the subject. Please try again later.</li>'
+        ];
+    }
+
+    $stmt->close();
+
+    
+}
+
 
 ?>

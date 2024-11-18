@@ -1,7 +1,55 @@
 <?php
-$titlePage = "Delete Subject";
-include '../partials/header.php';
-include '../partials/side-bar.php';
+    ob_start();
+    include '../../functions.php';
+    guard();
+
+    $titlePage = "Delete Subject";
+    include '../partials/header.php';
+    include '../partials/side-bar.php';
+
+    $_SESSION['page'] = "admin/subject/delete.php";
+
+    global $conn;
+    $errorMessages = "";
+    $deleteId = $_GET['id'];
+
+    //this is for delete
+    if (isset($_POST['btnSubject'])) {
+    
+        $validate = deleteSubject($deleteId);
+    
+        if (!$validate['success']) {
+            $errorMessages = $validate['error'];
+        } else {
+            header("location: ./add.php");
+            exit;
+        }
+    }
+    
+
+    //this is for display
+    $subjectCode ='';
+    $subjectName = '';
+
+    $sql = "SELECT * FROM subjects WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+    $stmt->bind_param("s", $deleteId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc(); 
+        $subjectCode = $row['subject_code'];
+        $subjectName = $row['subject_name'];
+    }
+
+    ob_end_flush();
+
 ?>
 
 
@@ -21,11 +69,11 @@ include '../partials/side-bar.php';
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <label style="font-size: 15px">Are you sure you want to delete the following subject record?</label>
             <ul>
-                <li><span style="font-weight: bold"> Subject Code:</li>
-                <li><span style="font-weight: bold"> Subject Name:</li>
+                <li><span style="font-weight: bold"> Subject Code: <?php echo $subjectCode ?> </span></li>
+                <li><span style="font-weight: bold"> Subject Name: <?php echo $subjectName ?></li>
             </ul>
-            <a href="../subject/add.php" class="btn btn-secondary btn-sm">Cancel</a>
-            <a href="" type="submit" class="btn btn-primary btn-sm" name="btnSubject">Delete Subject Record</a>
+            <a href="add.php" class="btn btn-secondary btn-sm">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-sm" name="btnSubject">Delete Subject Record</button>
         </form>
 
 <?php
