@@ -223,5 +223,28 @@ function editStudent($studentId, $studentFirstName, $studentLastName)
     }
 }
 
+function deleteStudent($studentId)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM students WHERE id = ?");
+    $stmt->bind_param("i", $studentId);
+
+    if ($stmt->execute()) {
+        return [
+            "success" => true,
+            "error" => null
+        ];
+    } else {
+        return [
+            "success" => false,
+            "error" => '<li>Unable to delete the student. Please try again later.</li>'
+        ];
+    }
+
+    $stmt->close();
+
+    
+}
 
 ?>
