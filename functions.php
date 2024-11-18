@@ -305,4 +305,78 @@ function validateSubject($subjectCode, $subjectName)
 
 }
 
+function editSubject($subjectCode, $subjectName)
+{
+    global $conn;
+
+    $htmlError = '';
+
+    if (empty($subjectCode)) {
+        $htmlError .= '<li>Subject Code is required.</li>';
+    }
+    if (empty($subjectName)) {
+        $htmlError .= '<li>Subject Name is required.</li>';
+    }
+
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+    }
+
+    $sql = "SELECT * FROM subjects WHERE (subject_code = ? OR subject_name = ?) AND subject_code != ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        return [
+            "success" => false,
+            "error" => '<li>Database error: Unable to prepare the statement.</li>'
+        ];
+    }
+
+    $stmt->bind_param("sss", $subjectCode, $subjectName, $subjectCode);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        if ($subjectName === $row['subject_name']) {
+            $htmlError .= '<li>Duplicate Subject Name is not allowed.</li>';
+        }
+    }
+
+    $stmt->close();
+
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+    }
+    
+    $stmt = $conn->prepare("UPDATE subjects SET subject_name = ? WHERE subject_code = ?");
+    if (!$stmt) {
+        return [
+            "success" => false,
+            "error" => '<li>Database error: Unable to prepare the statement.</li>'
+        ];
+    }
+
+    $stmt->bind_param("ss", $subjectName, $subjectCode);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        return [
+            "success" => true,
+            "error" => null
+        ];
+    } else {
+        $stmt->close();
+        return [
+            "success" => false,
+            "error" => '<li>Unable to save changes. Please try again later.</li>'
+        ];
+    }
+}
+
+
 ?>
