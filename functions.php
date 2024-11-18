@@ -247,4 +247,62 @@ function deleteStudent($studentId)
     
 }
 
+function validateSubject($subjectCode, $subjectName)
+{
+    global $conn;
+
+    $htmlError = '';
+    if (empty($subjectCode)) {
+        $htmlError .= '<li>Subject Code is required.</li>';
+    }
+    if (empty($subjectName)) {
+        $htmlError .= '<li>Subject Name is required.</li>';
+    }
+    
+    $sql = "SELECT * FROM subjects WHERE subject_code = ? OR subject_name = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("ss", $subjectCode, $subjectName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($subjectCode == $row['subject_code']) {
+                $htmlError .= '<li>Duplicate Subject Code is not allowed.</li>';
+            }
+            if ($subjectName == $row['subject_name']) {
+                $htmlError .= '<li>Duplicate Subject Name is not allowed.</li>';
+            }
+        }
+    }
+  
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+            
+    } else {
+        $sql = "INSERT INTO subjects (subject_code, subject_name) VALUES ('$subjectCode', '$subjectName')";
+        if ($conn->query($sql) === TRUE) {
+            return [
+                "success" => true,
+            ];
+        }  else {
+            return [
+                "success" => false,
+                "error" => '<li>Not save.</li>'
+            ];
+        }
+        
+    }
+
+}
+
 ?>
