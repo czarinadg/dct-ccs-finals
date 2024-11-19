@@ -9,6 +9,10 @@ include './partials/side-bar.php';
 
 $_SESSION['page'] = "admin/dashboard.php";
 
+global $conn;
+
+$counts = getCounts($conn);
+
 
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">    
@@ -19,7 +23,7 @@ $_SESSION['page'] = "admin/dashboard.php";
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white border-primary">Number of Subjects:</div>
                 <div class="card-body text-primary">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $counts['subjects']; ?></h5>
                 </div>
             </div>
         </div>
@@ -27,7 +31,7 @@ $_SESSION['page'] = "admin/dashboard.php";
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white border-primary">Number of Students:</div>
                 <div class="card-body text-success">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $counts['students']; ?></h5>
                 </div>
             </div>
         </div>
