@@ -525,5 +525,29 @@ function joinStudentAndSubject()
     return $conn->query($sqlSubjectsAndGrade);
 }
 
+function getCounts($conn) {
+    $counts = [
+        'students' => 0,
+        'subjects' => 0,
+    ];
+
+    // Query to count students
+    $sqlStudents = "SELECT COUNT(*) AS total_students FROM students";
+    $resultStudents = $conn->query($sqlStudents);
+
+    if ($resultStudents && $row = $resultStudents->fetch_assoc()) {
+        $counts['students'] = $row['total_students'];
+    }
+
+    // Query to count subjects
+    $sqlSubjects = "SELECT COUNT(*) AS total_subjects FROM subjects";
+    $resultSubjects = $conn->query($sqlSubjects);
+
+    if ($resultSubjects && $row = $resultSubjects->fetch_assoc()) {
+        $counts['subjects'] = $row['total_subjects'];
+    }
+
+    return $counts;
+}
 
 ?>
