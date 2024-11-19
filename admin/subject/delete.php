@@ -69,8 +69,8 @@
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <label style="font-size: 15px">Are you sure you want to delete the following subject record?</label>
             <ul>
-                <li><span style="font-weight: bold"> Subject Code: <?php echo $subjectCode ?> </span></li>
-                <li><span style="font-weight: bold"> Subject Name: <?php echo $subjectName ?></li>
+                <li><span style="font-weight: bold"> Subject Code: <span style="font-weight:normal"> <?php echo $subjectCode ?> </span></li>
+                <li><span style="font-weight: bold"> Subject Name: <span style="font-weight:normal"> <?php echo $subjectName ?> </span></li>
             </ul>
             <a href="add.php" class="btn btn-secondary btn-sm">Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm" name="btnSubject">Delete Subject Record</button>
