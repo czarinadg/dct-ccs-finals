@@ -402,5 +402,128 @@ function deleteSubject($subjectCode)
     
 }
 
+function attachStudentToSubject($editId)
+{
+    global $conn;
+    $htmlError = '';
+
+    if (isset($_POST['selected_ids']) && !empty($_POST['selected_ids'])) {
+        $selectedIds = $_POST['selected_ids'];
+        
+
+        // Iterate through the selected IDs and insert into students_subjects table
+        foreach ($selectedIds as $subjectId) {
+            // Prepare SQL to insert into the students_subjects table
+            $sqlInsert = "INSERT INTO students_subjects (student_id, subject_id, grade) VALUES (?, ?, ?)";
+            $stmtInsert = $conn->prepare($sqlInsert);
+
+            if ($stmtInsert) {
+                $grade = 0.00;
+              
+                // Bind parameters and execute the query
+                $stmtInsert->bind_param("iid", $editId, $subjectId, $grade);
+                $stmtInsert->execute();
+                return [
+                    "success" => true,
+                ];
+            } else {
+
+                $htmlError .= "<li>Error preparing statement: " . $conn->error . '</li>';
+            }
+        }
+    } else {
+        $htmlError .= "<li>No subjects selected.</li>";
+    }
+
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+    }
+}
+
+function studentData($editId)
+{
+    global $conn;
+
+    $sql = "SELECT * FROM students WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+    $stmt->bind_param("s", $editId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc(); 
+
+        return [
+            "success" => true,
+            "data" => $row
+        ];
+    } else {
+        return [
+            "success" => false,
+            "error" => '<li>No Record Found</li>'
+        ];
+    }
+}
+
+function subjectCheckbox($editId)
+{
+    global $conn;
+
+    $sql = "
+    SELECT sub.id, sub.subject_code, sub.subject_name
+    FROM subjects sub
+    LEFT JOIN students_subjects ss
+    ON sub.id = ss.subject_id AND ss.student_id = ?
+    WHERE ss.subject_id IS NULL";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $editId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return [
+        "success" => true,
+        "data" => $result
+    ];
+    
+}
+
+function joinStudentAndSubject()
+{
+    global $conn;
+
+    $sqlSubjectsAndGrade = "
+    SELECT 
+        s.id AS student_id,
+        s.student_id AS student_code,
+        s.first_name,
+        s.last_name,
+        sub.id AS subject_id,
+        sub.subject_code,
+        sub.subject_name,
+        ss.grade
+    FROM 
+        students_subjects ss
+    JOIN 
+        students s ON ss.student_id = s.id
+    JOIN 
+        subjects sub ON ss.subject_id = sub.id";
+
+    return $conn->query($sqlSubjectsAndGrade);
+}
+
 
 ?>
