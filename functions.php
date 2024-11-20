@@ -409,9 +409,8 @@ function attachStudentToSubject($editId)
 
     if (isset($_POST['selected_ids']) && !empty($_POST['selected_ids'])) {
         $selectedIds = $_POST['selected_ids'];
-        
-
-        // Iterate through the selected IDs and insert into students_subjects table
+    
+        //Iterate through the selected IDs and insert into students_subjects table
         foreach ($selectedIds as $subjectId) {
             // Prepare SQL to insert into the students_subjects table
             $sqlInsert = "INSERT INTO students_subjects (student_id, subject_id, grade) VALUES (?, ?, ?)";
@@ -423,14 +422,15 @@ function attachStudentToSubject($editId)
                 // Bind parameters and execute the query
                 $stmtInsert->bind_param("iid", $editId, $subjectId, $grade);
                 $stmtInsert->execute();
-                return [
-                    "success" => true,
-                ];
+                
             } else {
 
                 $htmlError .= "<li>Error preparing statement: " . $conn->error . '</li>';
             }
         }
+        return [
+            "success" => true,
+        ];
     } else {
         $htmlError .= "<li>No subjects selected.</li>";
     }
@@ -531,7 +531,7 @@ function subjectCheckbox($editId)
     
 }
 
-function joinStudentAndSubject()
+function joinStudentAndSubject($editId)
 {
     global $conn;
 
@@ -550,7 +550,7 @@ function joinStudentAndSubject()
     JOIN 
         students s ON ss.student_id = s.id
     JOIN 
-        subjects sub ON ss.subject_id = sub.id";
+        subjects sub ON ss.subject_id = sub.id WHERE s.id = " . $editId;
 
     return $conn->query($sqlSubjectsAndGrade);
 }
@@ -627,5 +627,37 @@ function dettachSubjectToStudent($studentId, $subjectId)
     }
 }
 
+function attachGradeToStudentSubject($studentId, $subjectId, $grade)
+{
+    global $conn;
 
+    $htmlError = '';
+    if (empty($grade)) {
+        $htmlError .= '<li>Grade is required.</li>';
+    }
+
+    if (!empty($htmlError)) {
+        return [
+            "success" => false,
+            "error" => $htmlError
+        ];
+    } else {
+        echo $subjectId;
+        echo $studentId;
+        $stmt = $conn->prepare("UPDATE students_subjects SET grade = ? WHERE student_id = ? AND subject_id = ?");
+        $stmt->bind_param("dii", $grade, $studentId, $subjectId);
+
+        if ($stmt->execute()) {
+            header("Location: ./attach-subject.php?id=" . $studentId);
+            exit;
+        } else {
+            return [
+                "success" => false,
+                "error" => '<li>Unable to save changes. Please try again later.</li>'
+            ];
+        }
+
+        $stmt->close();
+    }
+}
 ?>

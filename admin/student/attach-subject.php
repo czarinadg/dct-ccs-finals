@@ -7,8 +7,6 @@
     include '../partials/header.php';
     include '../partials/side-bar.php';
 
-    $_SESSION['page'] = "admin/student/attach-subject.php";
-
     global $conn;
 
     $errorMessages = "";
@@ -16,6 +14,8 @@
     $studentId ='';
     $studentFirstname = '';
     $studentLastname = '';
+
+    $_SESSION['page'] = "admin/student/attach-subject.php?id=" . $editId;
 
     //save attach subject to students
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnStudent'])) {
@@ -41,7 +41,7 @@
     
 
     // display students subject and grade
-    $resultSubjectsAndGrade = joinStudentAndSubject();
+    $resultSubjectsAndGrade = joinStudentAndSubject($editId);
 
 ?>
 
