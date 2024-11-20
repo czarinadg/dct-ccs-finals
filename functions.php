@@ -660,4 +660,48 @@ function attachGradeToStudentSubject($studentId, $subjectId, $grade)
         $stmt->close();
     }
 }
+
+function passAndFailedStudents()
+{
+    global $conn;
+    $sql = "
+    SELECT 
+        SUM(CASE WHEN avg_grade >= 75 THEN 1 ELSE 0 END) AS pass_count,
+        SUM(CASE WHEN avg_grade < 75 THEN 1 ELSE 0 END) AS fail_count
+    FROM (
+        SELECT 
+            student_id, 
+            AVG(grade) AS avg_grade
+        FROM 
+            students_subjects
+        GROUP BY 
+            student_id
+    ) AS student_avg;
+    ";
+
+    // Execute the query
+    $result = $conn->query($sql);
+
+    // Check if query was successful
+    if ($result && $result->num_rows > 0) {
+        // Fetch the result
+        $row = $result->fetch_assoc();
+        $passCount = $row['pass_count'];
+        $failCount = $row['fail_count'];
+
+        return[
+            "pass" => $passCount,
+            "failed"=> $failCount
+        ];
+
+    } else {
+        return[
+            "pass" => 0,
+            "failed"=> 0
+        ];
+    }
+
+    // Close connection
+    $conn->close();
+}
 ?>
