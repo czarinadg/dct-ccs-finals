@@ -1,7 +1,36 @@
 <?php
+    ob_start();
+    include '../../functions.php';
+    guard();
+
+
     $titlePage = "Dettach Subject from Student";
     include '../partials/header.php';
     include '../partials/side-bar.php';
+
+    $_SESSION['page'] = "admin/student/dettach-subject.php";
+
+    global $conn;
+
+    $studentId = $_GET['student_id'];
+    $subjectId = $_GET['subject_id'];
+
+    $studentData = studentData($studentId);
+    if ($studentData['success']) {
+        $studentCode = $studentData['data']['student_id'];
+        $studentFirstname = $studentData['data']['first_name'];
+        $studentLastname = $studentData['data']['last_name'];
+    } 
+
+    $subjectData = subjectData($subjectId);
+    if ($subjectData['success']) {
+        $subjectCode = $subjectData['data']['subject_code'];
+        $subjectName = $subjectData['data']['subject_name'];
+    } 
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnStudent'])) {
+        $test = dettachSubjectToStudent($studentId, $subjectId);
+    }
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
@@ -20,11 +49,11 @@
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <label style="font-size: 15px">Are you sure you want to delete the following student record?</label>
             <ul>
-                <li><span style="font-weight: bold"> Student ID:</li>
-                <li><span style="font-weight: bold"> First Name:</li>
-                <li><span style="font-weight: bold"> Last Name:</li>
-                <li><span style="font-weight: bold"> Subject Code:</li>
-                <li><span style="font-weight: bold"> Subject Name:</li>
+                <li><span style="font-weight: bold"> Student ID:<span style="font-weight: normal"> <?php echo $studentCode ?></span> </li>
+                <li><span style="font-weight: bold"> First Name: <span style="font-weight: normal"><?php echo $studentFirstname ?></span> </li>
+                <li><span style="font-weight: bold"> Last Name: <span style="font-weight: normal"><?php echo $studentLastname ?> </span></li>
+                <li><span style="font-weight: bold"> Subject Code: <span style="font-weight: normal"><?php echo $subjectCode ?> </span></li>
+                <li><span style="font-weight: bold"> Subject Name: <span style="font-weight: normal"><?php echo $subjectName ?>  </span></li>
             </ul>
             <a href="../student/attach-subject.php" class="btn btn-secondary btn-sm">Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm" name="btnStudent">Dettach Subject from Student</button>

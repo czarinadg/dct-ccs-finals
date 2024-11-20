@@ -443,7 +443,7 @@ function attachStudentToSubject($editId)
     }
 }
 
-function studentData($editId)
+function studentData($studentId)
 {
     global $conn;
 
@@ -454,7 +454,37 @@ function studentData($editId)
         echo "Error: " . $conn->error;
         return false;
     }
-    $stmt->bind_param("s", $editId);
+    $stmt->bind_param("s", $studentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc(); 
+
+        return [
+            "success" => true,
+            "data" => $row
+        ];
+    } else {
+        return [
+            "success" => false,
+            "error" => '<li>No Record Found</li>'
+        ];
+    }
+}
+
+function subjectData($subjectId)
+{
+    global $conn;
+
+    $sql = "SELECT * FROM subjects WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo "Error: " . $conn->error;
+        return false;
+    }
+    $stmt->bind_param("s", $subjectId);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -549,5 +579,53 @@ function getCounts($conn) {
 
     return $counts;
 }
+
+function dettachSubjectToStudent($studentId, $subjectId)
+{
+    global $conn;
+
+    // Validate inputs
+    if (!is_numeric($studentId) || !is_numeric($subjectId)) {
+        return [
+            "success" => false,
+            "error" => '<li>Invalid student or subject ID.</li>'
+        ];
+    }
+    // Prepare the SQL query
+    $stmt = $conn->prepare("DELETE FROM students_subjects WHERE student_id = ? AND subject_id = ?");
+    
+    // Check if the statement was prepared successfully
+    if (!$stmt) {
+        return [
+            "success" => false,
+            "error" => '<li>Failed to prepare the SQL statement: ' . $conn->error . '</li>'
+        ];
+    }
+
+    // Bind parameters
+    $stmt->bind_param("ii", $studentId, $subjectId);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) { // Check if any rows were deleted
+            $stmt->close();
+            header("Location: ./attach-subject.php?id=" . $studentId);
+            exit;
+        } else {
+            $stmt->close();
+            return [
+                "success" => false,
+                "error" => '<li>No matching record found to delete.</li>'
+            ];
+        }
+    } else {
+        $stmt->close();
+        return [
+            "success" => false,
+            "error" => '<li>Unable to delete the subject. Error: ' . $stmt->error . '</li>'
+        ];
+    }
+}
+
 
 ?>
