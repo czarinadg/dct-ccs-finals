@@ -8,12 +8,10 @@
     include '../partials/header.php';
     include '../partials/side-bar.php';
 
-    $_SESSION['page'] = "admin/student/dettach-subject.php";
-
-    global $conn;
-
     $studentId = $_GET['student_id'];
     $subjectId = $_GET['subject_id'];
+
+    $_SESSION['page'] = "admin/student/dettach-subject.php?student_id=" .$studentId. "&subject_id=" . $subjectId; 
 
     $studentData = studentData($studentId);
     if ($studentData['success']) {
@@ -29,7 +27,7 @@
     } 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnStudent'])) {
-        $test = dettachSubjectToStudent($studentId, $subjectId);
+        dettachSubjectToStudent($studentId, $subjectId);
     }
 ?>
 
@@ -40,7 +38,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="../student/register.php"> Register Student</a></li>
+                    <li class="breadcrumb-item"><a href="./attach-subject.php?id=<?php echo  $studentId ?>"> Register Student</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Delete Student</li>
                 </ol>
             </nav>
@@ -55,7 +53,7 @@
                 <li><span style="font-weight: bold"> Subject Code: <span style="font-weight: normal"><?php echo $subjectCode ?> </span></li>
                 <li><span style="font-weight: bold"> Subject Name: <span style="font-weight: normal"><?php echo $subjectName ?>  </span></li>
             </ul>
-            <a href="../student/attach-subject.php" class="btn btn-secondary btn-sm">Cancel</a>
+            <a href="./attach-subject.php?id=<?php echo $studentId ?>" class="btn btn-secondary btn-sm">Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm" name="btnStudent">Dettach Subject from Student</button>
         </form>
 

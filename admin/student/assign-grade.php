@@ -1,7 +1,45 @@
 <?php
+    ob_start();
+    include '../../functions.php';
+    guard();
+    
     $titlePage = "Assign Grade to Subject";
     include '../partials/header.php';
     include '../partials/side-bar.php';
+
+    $studentId = $_GET['student_id'];
+    $subjectId = $_GET['subject_id'];
+
+    $_SESSION['page'] = "admin/student/assign-grade.php?student_id=" .$studentId. "&subject_id=" . $subjectId;
+
+    $errorMessages = "";
+
+    global $conn;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnStudent'])) {
+        $grade = $_POST['grade'];
+        $validate = attachGradeToStudentSubject($studentId, $subjectId, $grade);
+        if (!$validate['success']) {
+            $errorMessages = $validate['error']; 
+        } 
+    }
+
+    $studentData = studentData($studentId);
+    if ($studentData['success']) {
+        $studentCode = $studentData['data']['student_id'];
+        $studentFirstname = $studentData['data']['first_name'];
+        $studentLastname = $studentData['data']['last_name'];
+    } 
+
+    $subjectData = subjectData($subjectId);
+    if ($subjectData['success']) {
+        $subjectCode = $subjectData['data']['subject_code'];
+        $subjectName = $subjectData['data']['subject_name'];
+    } 
+
+   
+   
+
 ?>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
@@ -18,19 +56,20 @@
         </div>
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
+        <?php echo renderErrorMessages($errorMessages); ?>
             <label style="font-size: 15px">Are you sure you want to delete the following student record?</label>
             <ul>
-                <li><span style="font-weight: bold"> Student ID:</li>
-                <li><span style="font-weight: bold"> Name:</li>
-                <li><span style="font-weight: bold"> Subject Code:</li>
-                <li><span style="font-weight: bold"> Subject Name:</li>
+                <li><span style="font-weight: bold"> Student ID: <span style="font-weight: normal"> <?php echo $studentCode ?></span></li>
+                <li><span style="font-weight: bold"> Name: <span style="font-weight: normal"> <?php echo $studentFirstname . ' ' . $studentLastname ?></span></li>
+                <li><span style="font-weight: bold"> Subject Code: <span style="font-weight: normal"> <?php echo $subjectCode ?></span></li>
+                <li><span style="font-weight: bold"> Subject Name: <span style="font-weight: normal"> <?php echo $subjectName ?></span></li>
             </ul>
             <hr>
             <div class="input-group mb-3">
-                    <input type="number" class="form-control" placeholder="Grade" aria-label="Grade">
+                    <input type="number" class="form-control" name="grade" placeholder="Grade" aria-label="Grade">
             </div>
 
-            <a href="../student/attach-subject.php" class="btn btn-secondary btn-sm">Cancel</a>
+            <a href="./attach-subject.php?id=<?php echo $studentId ?>" class="btn btn-secondary btn-sm">Cancel</a>
             <button type="submit" class="btn btn-primary btn-sm" name="btnStudent">Assign Grade to Subject</button>
         </form>
 
