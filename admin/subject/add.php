@@ -48,11 +48,11 @@
         <?php echo renderErrorMessages($errorMessages); ?>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="exampleInputCode" name="subject_code" placeholder="Enter Subject Code">
-                <label for="exampleInputCode">First Name</label>
+                <label for="exampleInputCode">Subject Code</label>
             </div>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="exampleInputName" name="subject_name" placeholder="Enter Subject Name">
-                <label for="exampleInputName">Last Name</label>
+                <label for="exampleInputName">Subject Name</label>
             </div>
             <button type="submit" name="btnSubject" class="btn btn-primary w-100">Add Subject</button>
         </form>
