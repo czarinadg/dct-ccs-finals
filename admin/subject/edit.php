@@ -68,11 +68,13 @@
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
         <?php echo renderErrorMessages($errorMessages); ?>
-            <div class="form-group mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="subjectCode" placeholder="Subject ID" name="subject_code" value="<?php echo $subjectCode ?>" readonly>
+                <label for="exampleInputCode">Subject Code</label>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="subjectName" placeholder="Subject Name" name="subject_name" value="<?php echo $subjectName ?>">
+                <label for="exampleInputCode">Subject Name</label>
             </div>
             <button type="submit" class="btn btn-primary w-100" name="btnSubject">Update Subject</button>
         </form>
