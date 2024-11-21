@@ -45,14 +45,17 @@ $result = $conn->query($sql);
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
             <?php echo renderErrorMessages($errorMessages); ?>
-            <div class="form-group mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" name="student_id" class="form-control" id="studentId" placeholder="Student ID ">
+                <label for="studentId">Student ID</label>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" name="first_name" class="form-control" id="firstName" placeholder="First Name">
+                <label for="firstName">First Name</label>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" name="last_name" class="form-control" id="lastName" placeholder="Last Name">
+                <label for="lastName">Last Name</label>
             </div>
             <button type="submit" name="btnStudent" class="btn btn-primary w-100">Add Student</button>
         </form>
