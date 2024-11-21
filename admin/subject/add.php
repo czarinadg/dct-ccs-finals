@@ -46,13 +46,13 @@
 
         <form method="post" class="mt-4 p-3 border rounded p-5">
         <?php echo renderErrorMessages($errorMessages); ?>
-            <div class="form-group mb-3">
-                <label for="exampleInputSubjectCode">Subject Code</label>
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="exampleInputCode" name="subject_code" placeholder="Enter Subject Code">
+                <label for="exampleInputCode">First Name</label>
             </div>
-            <div class="form-group mb-3">
-                <label for="exampleInputSubjectName">Subject Name</label>
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="exampleInputName" name="subject_name" placeholder="Enter Subject Name">
+                <label for="exampleInputName">Last Name</label>
             </div>
             <button type="submit" name="btnSubject" class="btn btn-primary w-100">Add Subject</button>
         </form>

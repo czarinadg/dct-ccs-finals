@@ -49,7 +49,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="../student/register.php"> Register Student</a></li>
+                    <li class="breadcrumb-item"><a href="./register.php"> Register Student</a></li>
+                    <li class="breadcrumb-item"><a href="./attach-subject.php?id=<?php echo  $studentId ?>">Add Subject to Students</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Delete Student</li>
                 </ol>
             </nav>
@@ -65,8 +66,9 @@
                 <li><span style="font-weight: bold"> Subject Name: <span style="font-weight: normal"> <?php echo $subjectName ?></span></li>
             </ul>
             <hr>
-            <div class="input-group mb-3">
-                    <input type="number" class="form-control" name="grade" placeholder="Grade" aria-label="Grade">
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" name="grade" id="grade" placeholder="Grade" aria-label="Grade" min="0.00" max="100.00">
+                <label for="grade">Grade</label>
             </div>
 
             <a href="./attach-subject.php?id=<?php echo $studentId ?>" class="btn btn-secondary btn-sm">Cancel</a>
