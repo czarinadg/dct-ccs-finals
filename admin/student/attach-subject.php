@@ -64,7 +64,7 @@
             <label style="font-size: 20px">Selected Student Information</label>
             <ul>
                 <li><span style="font-weight: bold"> Student ID: <span style="font-weight: normal"> <?php echo $studentId ?> </span></li>
-                <li><span style="font-weight: bold"> Subject Name: <span style="font-weight: normal"> <?php echo $studentFirstname . ' ' . $studentLastname ?> </span></li>
+                <li><span style="font-weight: bold"> Name: <span style="font-weight: normal"> <?php echo $studentFirstname . ' ' . $studentLastname ?> </span></li>
 
                 <hr>
             </ul>
