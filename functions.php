@@ -231,10 +231,18 @@ function deleteStudent($studentId)
     $stmt->bind_param("i", $studentId);
 
     if ($stmt->execute()) {
-        return [
-            "success" => true,
-            "error" => null
-        ];
+
+        $stmt = $conn->prepare("DELETE FROM students_subjects WHERE student_id = ?");
+        $stmt->bind_param("i", $studentId);
+
+        if ($stmt->execute()) {
+            return [
+                "success" => true,
+                "error" => null
+            ];
+        }
+            
+        
     } else {
         return [
             "success" => false,
@@ -386,10 +394,15 @@ function deleteSubject($subjectCode)
     $stmt->bind_param("i", $subjectCode);
 
     if ($stmt->execute()) {
-        return [
-            "success" => true,
-            "error" => null
-        ];
+        $stmt = $conn->prepare("DELETE FROM students_subjects WHERE subject_id = ?");
+        $stmt->bind_param("i", $subjectCode);
+
+        if ($stmt->execute()) {
+            return [
+                "success" => true,
+                "error" => null
+            ];
+        }
     } else {
         return [
             "success" => false,
